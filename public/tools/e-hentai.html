@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-hentai url generate</title>
+</head>
+
+<body>
+  url: <input type="text" name="url">
+  <br>
+  page: <input type="number" name="page">
+  <br>
+  <button>generate</button>
+  <br>
+  result:
+  <textarea name="" id="" cols="30" rows="10" disabled></textarea>
+</body>
+<script>
+  document.querySelector('button').addEventListener('click', function () {
+    var url = document.querySelector('input[name=url]').value;
+    var page = document.querySelector('input[name=page]').value;
+    console.log(url);
+    console.log(page);
+    var res = '';
+    res = url;
+    for (let u = 1; u < page; u++) {
+      res = res + ',' + url + '?p=' + u;
+    }
+    document.querySelector('textarea').value = res;
+  });
+</script>
+
+</html>
