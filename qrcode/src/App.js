@@ -1,5 +1,7 @@
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
-import { ConfigProvider, Layout, Button } from 'antd';
+import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
+import { ConfigProvider, Layout, Button, Input, Upload, message } from 'antd';
 import 'antd/dist/reset.css';
 import './App.css';
 
@@ -40,6 +42,19 @@ const footerStyle = {
 };
 
 function App() {
+  const [fileList, setFileList] = useState([]);
+
+  const props = {
+    accept: 'image/*',
+    maxCount: 1,
+    showUploadList: false,
+    beforeUpload: (file) => {
+      setFileList([file]);
+      console.log(file)
+      return false;
+    },
+    fileList,
+  }
 
   // With async/await
   var opts = {
@@ -52,6 +67,14 @@ function App() {
       dark:"#000",
       light:"#fff"
     }
+  }
+
+  useEffect(() => {
+    console.log(fileList)
+  }, [fileList])
+
+  const removeIcon = () => {
+    setFileList([])
   }
 
   const generateQR = (text) => {
@@ -131,9 +154,19 @@ function App() {
         </Header>
         <Content style={contentStyle}>
           <main className="pure-g">
-          <div className="pure-u-1 pure-u-md-1-3"> ... </div>
-          <div className="pure-u-1 pure-u-md-1-3"> ... </div>
-          <div className="pure-u-1 pure-u-md-1-3"> ... </div>
+          <div className="pure-u-1 pure-u-md-1-4">
+            <Input placeholder="Input text or URL" />
+          </div>
+          <div className="pure-u-1 pure-u-md-1-4">
+            <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Add icon</Button>
+            </Upload>
+            <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+          </div>
+          <div className="pure-u-1 pure-u-md-1-4"> ... </div>
+          <div className="pure-u-1 pure-u-md-1-4">
+            <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
+          </div>
           </main>
           <section>
 
