@@ -17,32 +17,6 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const { Title } = Typography;
 
-const headerStyle = {
-  textAlign: 'left',
-  color: '#fff',
-  minHeight: 64,
-  paddingInline: 16,
-  lineHeight: '48px',
-  // backgroundColor: '#7dbcea',
-  fontSize: '24px',
-  fontWeight: 'bold'
-};
-
-const contentStyle = {
-  textAlign: 'center',
-  minHeight: 120,
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#282c34'
-  // backgroundColor: '#108ee9',
-};
-
-const footerStyle = {
-  textAlign: 'center',
-  color: '#fff',
-  // backgroundColor: '#7dbcea',
-};
-
 function App() {
   const [fileList, setFileList] = useState([]);
 
@@ -83,8 +57,9 @@ function App() {
     setFileList([])
   }
 
-  const updateQRCode = (e) => {
+  const updateQRCode = (e, value) => {
     console.log(e)
+    console.log(value)
   }
 
   const generateQR = (text) => {
@@ -149,38 +124,34 @@ function App() {
           Learn React
         </a>
       </header>
-      <Layout>
-        <Header style={headerStyle}>
-          <Title>QRCode maker - make qrcode & download easy</Title>
-          <Title level={2}>You can make QRCode easy & download it as image</Title>
-        </Header>
-        <Content style={contentStyle}>
-          <main className="pure-g">
-            <div className="pure-u-1 pure-u-md-1-4">
-              <Title level={3}>Input text or url show from QRCode scran</Title>
-              <Input onChange={updateQRCode} placeholder="Input text or URL" value={qrCodeText} />
-            </div>
-            <div className="pure-u-1 pure-u-md-1-4">
-              <Title level={3}>Add icon in QRCode</Title>
-              <Upload {...props}>
-                <Button icon={<UploadOutlined />}>Add icon</Button>
-              </Upload>
-              <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
-            </div>
-            <div className="pure-u-1 pure-u-md-1-4">
-              <title level={3}>QRCode setting</title>
-              <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
-            </div>
-            <div className="pure-u-1 pure-u-md-1-4">
-              <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
-            </div>
-          </main>
-          <section>
+      <header>
+        <h1>QRCode maker - make qrcode & download easy</h1>
+        <h2>You can make QRCode easy & download it as image</h2>
+      </header>
+      <main className="pure-g">
+        <div className="pure-u-1 pure-u-md-1-4">
+          <Title level={3}>Input text or url show from QRCode scran</Title>
+          <Input onChange={updateQRCode} placeholder="Input text or URL" value={qrCodeText} />
+        </div>
+        <div className="pure-u-1 pure-u-md-1-4">
+          <Title level={3}>Add icon in QRCode</Title>
+          <Upload {...props}>
+            <Button icon={<UploadOutlined />}>Add icon</Button>
+          </Upload>
+          <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+        </div>
+        <div className="pure-u-1 pure-u-md-1-4">
+          <title level={3}>QRCode setting</title>
+          <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
+        </div>
+        <div className="pure-u-1 pure-u-md-1-4">
+          <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
+        </div>
+      </main>
+      <section>
 
-          </section>
-        </Content>
-        <Footer style={footerStyle}>Footer</Footer>
-      </Layout>
+      </section>
+      <footer>Footer</footer>
     </div>
   </ConfigProvider>
   );
