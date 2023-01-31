@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ConfigProvider, Layout, Button, Input, Upload, message } from 'antd';
+import { ConfigProvider, theme, Layout, Space, Button, Input, Upload, Typography, InputNumber } from 'antd';
 import 'antd/dist/reset.css';
 import './App.css';
 
@@ -15,10 +15,12 @@ import QRCode from 'qrcode'
 
 const { Header, Footer, Sider, Content } = Layout;
 
+const { Title } = Typography;
+
 const headerStyle = {
   textAlign: 'left',
   color: '#fff',
-  height: 48,
+  minHeight: 64,
   paddingInline: 16,
   lineHeight: '48px',
   // backgroundColor: '#7dbcea',
@@ -44,6 +46,10 @@ const footerStyle = {
 function App() {
   const [fileList, setFileList] = useState([]);
 
+  const [qrCodeText, setQrCodeText] = useState('');
+
+  const [qrCodeSize, setQrCodeSize] = useState('120');
+
   const props = {
     accept: 'image/*',
     maxCount: 1,
@@ -65,7 +71,7 @@ function App() {
     height: 400,
     color: {
       dark:"#000",
-      light:"#fff"
+      light:"#ffa"
     }
   }
 
@@ -77,6 +83,10 @@ function App() {
     setFileList([])
   }
 
+  const updateQRCode = (e) => {
+    console.log(e)
+  }
+
   const generateQR = (text) => {
 
     QRCode.toCanvas(text, opts, function (err, canvas) {
@@ -86,7 +96,6 @@ function App() {
       container.appendChild(canvas)
       make_base()
     })
-
 
     function make_base() {
       let canvas = document.querySelector('canvas')
@@ -114,6 +123,7 @@ function App() {
   return (
     <ConfigProvider
     theme={{
+      algorithm: theme.darkAlgorithm,
       token: {
         colorPrimary: '#722ED1',
       },
@@ -139,34 +149,31 @@ function App() {
           Learn React
         </a>
       </header>
-      <main>
-
-      </main>
-      <div id="container">
-
-      </div>
-      <footer>
-
-      </footer>
       <Layout>
         <Header style={headerStyle}>
-          QRCode maker - make qrcode & download easy
+          <Title>QRCode maker - make qrcode & download easy</Title>
+          <Title level={2}>You can make QRCode easy & download it as image</Title>
         </Header>
         <Content style={contentStyle}>
           <main className="pure-g">
-          <div className="pure-u-1 pure-u-md-1-4">
-            <Input placeholder="Input text or URL" />
-          </div>
-          <div className="pure-u-1 pure-u-md-1-4">
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Add icon</Button>
-            </Upload>
-            <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
-          </div>
-          <div className="pure-u-1 pure-u-md-1-4"> ... </div>
-          <div className="pure-u-1 pure-u-md-1-4">
-            <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
-          </div>
+            <div className="pure-u-1 pure-u-md-1-4">
+              <Title level={3}>Input text or url show from QRCode scran</Title>
+              <Input onChange={updateQRCode} placeholder="Input text or URL" value={qrCodeText} />
+            </div>
+            <div className="pure-u-1 pure-u-md-1-4">
+              <Title level={3}>Add icon in QRCode</Title>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Add icon</Button>
+              </Upload>
+              <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+            </div>
+            <div className="pure-u-1 pure-u-md-1-4">
+              <title level={3}>QRCode setting</title>
+              <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
+            </div>
+            <div className="pure-u-1 pure-u-md-1-4">
+              <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
+            </div>
           </main>
           <section>
 
