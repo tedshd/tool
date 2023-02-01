@@ -28,7 +28,9 @@ function App() {
     accept: 'image/*',
     maxCount: 1,
     showUploadList: false,
-    beforeUpload: (file) => {
+    beforeUpload: async (file) => {
+      let dataUrl = await imgReader(file)
+      file.src = dataUrl
       setFileList([file]);
       console.log(file)
       return false;
@@ -37,7 +39,7 @@ function App() {
   }
 
   // With async/await
-  var opts = {
+  let opts = {
     errorCorrectionLevel: 'M',
     type: 'image/png',
     margin: 1,
@@ -50,37 +52,46 @@ function App() {
   }
 
   useEffect(() => {
-    console.log(fileList)
+    generateQR(qrCodeText)
   }, [fileList])
+
+  useEffect(() => {
+    generateQR(qrCodeText)
+  }, [qrCodeText])
 
   const removeIcon = () => {
     setFileList([])
   }
 
-  const updateQRCode = (e, value) => {
-    console.log(e)
-    console.log(value)
+  const updateQRCode = (e) => {
+    setQrCodeText(e.target.value)
   }
 
   const generateQR = (text) => {
+    let container = document.getElementById('container')
+    container.innerHTML = ''
+    if (!text) {
+      return
+    }
 
     QRCode.toCanvas(text, opts, function (err, canvas) {
       if (err) throw err
-
-      var container = document.getElementById('container')
       container.appendChild(canvas)
-      make_base()
+      if (fileList.length) {
+        addIcon()
+      }
     })
 
-    function make_base() {
+    function addIcon() {
       let canvas = document.querySelector('canvas')
       let context = canvas.getContext('2d')
       console.log(context)
-      let base_image = new Image();
-      base_image.src = icon;
-      base_image.onload = () => {
-        console.log(base_image)
-        context.drawImage(base_image, ((400/2) - (64/2)), ((400/2) - (64/2)));
+      let newImage = new Image()
+      // newImage.src = icon;
+      newImage.src = fileList[0].src
+      newImage.onload = () => {
+        console.log(newImage)
+        context.drawImage(newImage, ((400/2) - (64/2)), ((400/2) - (64/2)))
       }
     }
   }
@@ -88,11 +99,32 @@ function App() {
   function download(filename) {
     let canvas = document.querySelector('canvas')
     let dataUrl = canvas.toDataURL('image/png')
+    const link = document.createElement("a")
+    link.href = dataUrl
+    link.download = filename
+    link.click()
+  }
 
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = filename;
-    link.click();
+  function imgReader(file) {
+    const reader = new FileReader()
+    if (file) {
+      if (file.type === 'image/png' ||
+        file.type === 'image/jpg' ||
+        file.type === 'image/jpeg') {
+        reader.readAsDataURL(file)
+      } else {
+        console.error('file type error')
+      }
+    } else {
+      console.error('not file')
+      return
+    }
+
+    return new Promise(resolve => {
+      reader.addEventListener('load', () => {
+        resolve(reader.result)
+      }, false)
+    })
   }
 
   return (
@@ -107,7 +139,6 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img id="image" src="" alt="" />
-        <div id='container'></div>
         <button onClick={() => {generateQR('https://livestatus.livelychat.live/EVVrGqvAkCWN14d0bbb?refer=promote_campus')}}>Click me</button>
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <button onClick={() => download('qq.png')}>Download</button>
@@ -131,7 +162,7 @@ function App() {
       <main className="pure-g">
         <div className="pure-u-1 pure-u-md-1-4">
           <Title level={3}>Input text or url show from QRCode scran</Title>
-          <Input onChange={updateQRCode} placeholder="Input text or URL" value={qrCodeText} />
+          <Input placeholder="Input text or URL" onChange={updateQRCode} allowClear={true} defaultValue='' showCount={false} />
         </div>
         <div className="pure-u-1 pure-u-md-1-4">
           <Title level={3}>Add icon in QRCode</Title>
@@ -149,7 +180,7 @@ function App() {
         </div>
       </main>
       <section>
-
+        <div id='container'></div>
       </section>
       <footer>Footer</footer>
     </div>
