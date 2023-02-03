@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
+import reactCSS from 'reactcss'
+import { SketchPicker } from 'react-color'
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ConfigProvider, theme, Layout, Space, Button, Input, Upload, Typography, InputNumber } from 'antd';
+import { ConfigProvider, theme, Space, message, Form, Button, Input, Upload, Typography, InputNumber } from 'antd';
+import useInputChange from './hooks/useInputChange'
 import 'antd/dist/reset.css';
 import './App.css';
 
@@ -13,16 +16,168 @@ import icon from './livestatus_icon.png';
 
 import QRCode from 'qrcode'
 
-const { Header, Footer, Sider, Content } = Layout;
-
 const { Title } = Typography;
 
 function App() {
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState([])
 
-  const [qrCodeText, setQrCodeText] = useState('');
+  const [qrCodeText, setQrCodeText] = useInputChange('', 'trim')
+  const [qrCodeTextStatus, setQrCodeTextStatus] = useState('')
+  const [fileName, setFilename] = useInputChange('qrcode', 'trim')
 
-  const [qrCodeSize, setQrCodeSize] = useState('120');
+  const [qrCodeSize, setQrCodeSize] = useState('120')
+  const [iconSize, setIconSize] = useState('32')
+
+  // const state = {
+  //   displayColorPicker: false,
+  //   color: {
+  //     r: '241',
+  //     g: '112',
+  //     b: '19',
+  //     a: '1',
+  //   },
+  // };
+
+  const [colorPickerBgProps, setColorPickerBgProps] = useState({
+    displayColorPicker: false,
+    color: {
+      hex: '#fff',
+      rgb: {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1,
+      },
+      hsl: {
+        h: 0,
+        s: 0,
+        l: 1,
+        a: 1,
+      },
+    }
+  })
+
+  const [colorPickerFgProps, setColorPickerFgProps] = useState({
+    displayColorPicker: false,
+    color: {
+      hex: '#000',
+      rgb: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1,
+      },
+      hsl: {
+        h: 0,
+        s: 0,
+        l: .0,
+        a: 1,
+      },
+    }
+  })
+
+  const colorPickBgStyles = reactCSS({
+    'default': {
+      color: {
+        width: '36px',
+        height: '14px',
+        borderRadius: '2px',
+        background: `rgba(${ colorPickerBgProps.color.rgb.r }, ${ colorPickerBgProps.color.rgb.g }, ${ colorPickerBgProps.color.rgb.b }, ${ colorPickerBgProps.color.rgb.a })`,
+      },
+      swatch: {
+        padding: '5px',
+        background: '#141414',
+        borderRadius: '1px',
+        boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+        display: 'inline-block',
+        cursor: 'pointer',
+      },
+      popover: {
+        position: 'absolute',
+        zIndex: '2',
+      },
+      cover: {
+        position: 'fixed',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px',
+      },
+    },
+  });
+
+  const colorPickFgStyles = reactCSS({
+    'default': {
+      color: {
+        width: '36px',
+        height: '14px',
+        borderRadius: '2px',
+        background: `rgba(${ colorPickerFgProps.color.rgb.r }, ${ colorPickerFgProps.color.rgb.g }, ${ colorPickerFgProps.color.rgb.b }, ${ colorPickerFgProps.color.rgb.a })`,
+      },
+      swatch: {
+        padding: '5px',
+        background: '#141414',
+        borderRadius: '1px',
+        boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+        display: 'inline-block',
+        cursor: 'pointer',
+      },
+      popover: {
+        position: 'absolute',
+        zIndex: '2',
+      },
+      cover: {
+        position: 'fixed',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px',
+      },
+    },
+  });
+
+  const colorClick = (type) => {
+    if (type === 'bg') {
+      setColorPickerBgProps({
+        displayColorPicker: !colorPickerBgProps.displayColorPicker,
+        color: {...colorPickerBgProps.color}
+      })
+    } else {
+      setColorPickerFgProps({
+        displayColorPicker: !colorPickerFgProps.displayColorPicker,
+        color: {...colorPickerFgProps.color}
+      })
+    }
+  }
+
+  const colorClose = (type) => {
+    if (type === 'bg') {
+      setColorPickerBgProps({
+        displayColorPicker: false,
+        color: {...colorPickerBgProps.color}
+      })
+    } else {
+      setColorPickerFgProps({
+        displayColorPicker: false,
+        color: {...colorPickerFgProps.color}
+      })
+    }
+  }
+
+  const ColorChange = (color, type) => {
+    console.log(color)
+    if (type === 'bg') {
+      setColorPickerBgProps({
+        ...colorPickerBgProps.displayColorPicker,
+        color: color
+      })
+    } else {
+      setColorPickerFgProps({
+        ...colorPickerFgProps.displayColorPicker,
+        color: color
+      })
+    }
+  }
 
   const props = {
     accept: 'image/*',
@@ -43,28 +198,27 @@ function App() {
     errorCorrectionLevel: 'M',
     type: 'image/png',
     margin: 1,
-    width: 400,
-    height: 400,
+    width: qrCodeSize,
+    height: qrCodeSize,
     color: {
-      dark:"#000",
-      light:"#ffa"
+      dark: colorPickerFgProps.color.hex,
+      light: colorPickerBgProps.color.hex
     }
   }
 
   useEffect(() => {
+    if (qrCodeText) {
+      setQrCodeTextStatus('')
+    }
     generateQR(qrCodeText)
-  }, [fileList])
+  }, [fileList, qrCodeText, qrCodeSize, iconSize, colorPickerBgProps.color, colorPickerFgProps.color])
 
-  useEffect(() => {
-    generateQR(qrCodeText)
-  }, [qrCodeText])
+  // useEffect(() => {
+  //   generateQR(qrCodeText)
+  // }, [qrCodeText])
 
   const removeIcon = () => {
     setFileList([])
-  }
-
-  const updateQRCode = (e) => {
-    setQrCodeText(e.target.value)
   }
 
   const generateQR = (text) => {
@@ -91,17 +245,30 @@ function App() {
       newImage.src = fileList[0].src
       newImage.onload = () => {
         console.log(newImage)
-        context.drawImage(newImage, ((400/2) - (64/2)), ((400/2) - (64/2)))
+        let w = newImage.width
+        let h = newImage.height
+        w = iconSize
+        h = iconSize*(newImage.width / newImage.height)
+        let x = (qrCodeSize/2) - (w/2)
+        let y = (qrCodeSize/2) - (h/2)
+        console.log(x, y, w, h)
+        context.drawImage(newImage, x, y, w, h)
       }
     }
   }
 
-  function download(filename) {
+  const download = () => {
+    if (!qrCodeText) {
+      message.error('Please input text for QRCode')
+      setQrCodeTextStatus('error')
+      return
+    }
+    let downloadName = fileName || `qrcode`
     let canvas = document.querySelector('canvas')
     let dataUrl = canvas.toDataURL('image/png')
     const link = document.createElement("a")
     link.href = dataUrl
-    link.download = filename
+    link.download = `${downloadName}.png`
     link.click()
   }
 
@@ -137,52 +304,99 @@ function App() {
     }}
   >
     <div className="App">
-      <header className="App-header">
-        <img id="image" src="" alt="" />
-        <button onClick={() => {generateQR('https://livestatus.livelychat.live/EVVrGqvAkCWN14d0bbb?refer=promote_campus')}}>Click me</button>
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <button onClick={() => download('qq.png')}>Download</button>
-        <Button type="primary">Button</Button>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <header>
+      <header className='p-8'>
         <h1>QRCode maker - make qrcode & download easy</h1>
         <h2>You can make QRCode easy & download it as image</h2>
       </header>
       <main className="pure-g">
-        <div className="pure-u-1 pure-u-md-1-4">
+        <div className="pure-u-1 pure-u-md-1-4 p-16">
           <Title level={3}>Input text or url show from QRCode scran</Title>
-          <Input placeholder="Input text or URL" onChange={updateQRCode} allowClear={true} defaultValue='' showCount={false} />
+          <hr/>
+          <Form
+            name="basic"
+            layout="vertical"
+            labelCol={{ span: 16 }}
+            wrapperCol={{ span: 16 }}
+          >
+            <Form.Item label="Input text or URL" validateTrigger={'onChange'} validateStatus={qrCodeTextStatus}>
+              <Input minLength={1} placeholder="Input text or URL" onChange={setQrCodeText} allowClear={true} value={qrCodeText} showCount={false} required />
+            </Form.Item>
+          </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4">
+        <div className="pure-u-1 pure-u-md-1-4 p-16">
           <Title level={3}>Add icon in QRCode</Title>
-          <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Add icon</Button>
-          </Upload>
-          <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+          <hr/>
+          <Form
+            name="basic"
+            layout="vertical"
+            labelCol={{ span: 16 }}
+            wrapperCol={{ span: 16 }}
+          >
+            <Form.Item label="QRCode size">
+              <InputNumber min={32} max={512} value={iconSize} onChange={setIconSize} />
+            </Form.Item>
+            <Form.Item label="Add icon">
+              <Space>
+                <Upload {...props}>
+                  <Button icon={<UploadOutlined />}>Add icon</Button>
+                </Upload>
+                <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+              </Space>
+            </Form.Item>
+          </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4">
-          <title level={3}>QRCode setting</title>
-          <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
+        <div className="pure-u-1 pure-u-md-1-4 p-16">
+          <Title level={3}>QRCode setting</Title>
+          <hr/>
+          <Form
+            name="basic"
+            layout="vertical"
+            labelCol={{ span: 16 }}
+            wrapperCol={{ span: 16 }}
+          >
+            <Form.Item label="QRCode size">
+              <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
+            </Form.Item>
+            <Form.Item label="background color">
+              <div style={ colorPickBgStyles.swatch } onClick={ () => {colorClick('bg')} }>
+                <div style={ colorPickBgStyles.color } />
+              </div>
+              { colorPickerBgProps.displayColorPicker ? <div style={ colorPickBgStyles.popover }>
+                <div style={ colorPickBgStyles.cover } onClick={ () => {colorClose('bg')} }/>
+                <SketchPicker color={ colorPickerBgProps.color } onChange={ (color) => {ColorChange(color, 'bg')} } />
+              </div> : null }
+            </Form.Item>
+            <Form.Item label="QRCode color">
+              <div style={ colorPickFgStyles.swatch } onClick={ () => {colorClick()} }>
+                <div style={ colorPickFgStyles.color } />
+              </div>
+              { colorPickerFgProps.displayColorPicker ? <div style={ colorPickFgStyles.popover }>
+                <div style={ colorPickFgStyles.cover } onClick={ () => {colorClose()} }/>
+                <SketchPicker color={ colorPickerFgProps.color } onChange={ (color) => {ColorChange(color)} } />
+              </div> : null }
+            </Form.Item>
+          </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4">
-          <Button type="primary" icon={<DownloadOutlined />}>Download</Button>
+        <div className="pure-u-1 pure-u-md-1-4 p-16">
+          <Title level={3}>QRCode output</Title>
+          <hr/>
+          <Form
+            name="basic"
+            layout="vertical"
+            labelCol={{ span: 16 }}
+            wrapperCol={{ span: 16 }}
+          >
+            <Form.Item label="file name">
+              <Input minLength={1} maxLength={2048} value={fileName} onChange={setFilename}  placeholder="Input filename" />
+            </Form.Item>
+            <Button type="primary" icon={<DownloadOutlined />} onClick={download} >Download</Button>
+          </Form>
         </div>
       </main>
       <section>
         <div id='container'></div>
       </section>
-      <footer>Footer</footer>
+      <footer></footer>
     </div>
   </ConfigProvider>
   );
