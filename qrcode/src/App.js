@@ -309,7 +309,7 @@ function App() {
         <h2>You can make QRCode easy & download it as image</h2>
       </header>
       <main className="pure-g">
-        <div className="pure-u-1 pure-u-md-1-4 p-16">
+        <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
           <Title level={3}>Input text or url show from QRCode scran</Title>
           <hr/>
           <Form
@@ -323,7 +323,7 @@ function App() {
             </Form.Item>
           </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4 p-16">
+        <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
           <Title level={3}>Add icon in QRCode</Title>
           <hr/>
           <Form
@@ -332,7 +332,7 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="QRCode size">
+            <Form.Item label="QRCode size(32 ~ 512)">
               <InputNumber min={32} max={512} value={iconSize} onChange={setIconSize} />
             </Form.Item>
             <Form.Item label="Add icon">
@@ -345,7 +345,7 @@ function App() {
             </Form.Item>
           </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4 p-16">
+        <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
           <Title level={3}>QRCode setting</Title>
           <hr/>
           <Form
@@ -354,7 +354,7 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="QRCode size">
+            <Form.Item label="QRCode size(64 ~ 1024)">
               <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
             </Form.Item>
             <Form.Item label="background color">
@@ -377,7 +377,7 @@ function App() {
             </Form.Item>
           </Form>
         </div>
-        <div className="pure-u-1 pure-u-md-1-4 p-16">
+        <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
           <Title level={3}>QRCode output</Title>
           <hr/>
           <Form
