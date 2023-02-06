@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "tool-19eb9"
+  },
+  "targets": {
+    "tool-19eb9": {
+      "hosting": {
+        "qrcode": [
+          "qrcode-make"
+        ]
+      }
+    }
   }
 }
