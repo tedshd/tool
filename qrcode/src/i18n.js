@@ -1,16 +1,18 @@
 
 import i18n from "i18next";
+import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import Backend from "i18next-http-backend";
 
 i18n
+   .use(detector)
    // 使用 i18next-http-backend
    .use(Backend)
    // 將 i18next 傳入 react-i18next 裡面
    .use(initReactI18next)
    // 實例化 initReactI18next
    .init({
-      debug: true,
+      debug: false,
       backend: {
          //網頁載入時去下載語言檔的位置
          loadPath: "/locales/{{lng}}.json",

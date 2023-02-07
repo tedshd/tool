@@ -211,10 +211,6 @@ function App() {
     generateQR(qrCodeText)
   }, [fileList, qrCodeText, qrCodeSize, iconSize, colorPickerBgProps.color, colorPickerFgProps.color])
 
-  // useEffect(() => {
-  //   generateQR(qrCodeText)
-  // }, [qrCodeText])
-
   const removeIcon = () => {
     setFileList([])
   }
