@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -10,10 +9,7 @@ import 'antd/dist/reset.css';
 import './App.css';
 
 import './grids.min.css';
-
 import './grids-responsive.min.css';
-
-import icon from './livestatus_icon.png';
 
 import QRCode from 'qrcode'
 
@@ -23,9 +19,9 @@ function App() {
   const [fileList, setFileList] = useState([])
   const { t, i18n } = useTranslation()
 
-  const [qrCodeText, setQrCodeText] = useInputChange('', 'trim')
+  const [qrCodeText, setQrCodeText] = useInputChange('')
   const [qrCodeTextStatus, setQrCodeTextStatus] = useState('')
-  const [fileName, setFilename] = useInputChange('qrcode', 'trim')
+  const [fileName, setFilename] = useInputChange('qrcode')
 
   const [qrCodeSize, setQrCodeSize] = useState('120')
   const [iconSize, setIconSize] = useState('32')
