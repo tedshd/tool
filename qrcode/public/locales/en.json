@@ -1,0 +1,18 @@
+{
+  "h1_title": "QRCode MAKER - Make QRCode and easily download",
+  "desc": "You can easily build QRCode and download",
+  "input_title": "Please enter the text to generate QRCode",
+  "input_label": "input text",
+  "add_icon_title": "Add icon to QRCode",
+  "icon_size": "Icon size(32 ~ 512)",
+  "add_icon_label": "Add icon",
+  "remove_icon": "Remove icon",
+  "qrcode_setting_title": "QRCode setting",
+  "qrcode_size": "QRCode size(64 ~ 1024)",
+  "bg_color": "background color",
+  "qrcode_color": "QRCode color",
+  "qrcode_output_title": "QRCode Output",
+  "file_name": "File name",
+  "input_file_name": "Please enter the file name",
+  "download": "Download"
+}

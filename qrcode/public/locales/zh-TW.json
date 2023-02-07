@@ -1,0 +1,18 @@
+{
+  "h1_title": "QRCode MAKER - 製作 QRCode 並且容易下載",
+  "desc": "您可以輕鬆建立 QRcode 並下載",
+  "input_title": "請輸入文字來生成 QRCode",
+  "input_label": "輸入文字",
+  "add_icon_title": "添加圖示到 QRCode",
+  "icon_size": "圖示尺寸(32 ~ 512)",
+  "add_icon_label": "添加圖示",
+  "remove_icon": "移除圖示",
+  "qrcode_setting_title": "QRCode 設定",
+  "qrcode_size": "QRCode 尺寸(64 ~ 1024)",
+  "bg_color": "背景顏色",
+  "qrcode_color": "QRCode 顏色",
+  "qrcode_output_title": "QRCode 輸出",
+  "file_name": "檔案名稱",
+  "input_file_name": "請輸入檔案名稱",
+  "download": "下載"
+}

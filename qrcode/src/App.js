@@ -5,6 +5,7 @@ import { SketchPicker } from 'react-color'
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ConfigProvider, theme, Space, message, Form, Button, Input, Upload, Typography, InputNumber } from 'antd';
 import useInputChange from './hooks/useInputChange'
+import { useTranslation } from 'react-i18next'
 import 'antd/dist/reset.css';
 import './App.css';
 
@@ -20,6 +21,7 @@ const { Title } = Typography;
 
 function App() {
   const [fileList, setFileList] = useState([])
+  const { t, i18n } = useTranslation()
 
   const [qrCodeText, setQrCodeText] = useInputChange('', 'trim')
   const [qrCodeTextStatus, setQrCodeTextStatus] = useState('')
@@ -305,12 +307,12 @@ function App() {
   >
     <div className="App">
       <header className='p-8'>
-        <h1>QRCode maker - make qrcode & download easy</h1>
-        <h2>You can make QRCode easy & download it as image</h2>
+        <h1>{ t('h1_title') }</h1>
+        <h2>{ t('desc') }</h2>
       </header>
       <main className="pure-g">
         <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
-          <Title level={3}>Input text or url show from QRCode scran</Title>
+          <Title level={3}>{ t('input_title') }</Title>
           <hr/>
           <Form
             name="basic"
@@ -318,13 +320,13 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="Input text or URL" validateTrigger={'onChange'} validateStatus={qrCodeTextStatus}>
-              <Input minLength={1} placeholder="Input text or URL" onChange={setQrCodeText} allowClear={true} value={qrCodeText} showCount={false} required />
+            <Form.Item label={ t('input_label') } validateTrigger={'onChange'} validateStatus={qrCodeTextStatus}>
+              <Input minLength={1} placeholder={ t('input_label') } onChange={setQrCodeText} allowClear={true} value={qrCodeText} showCount={false} required />
             </Form.Item>
           </Form>
         </div>
         <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
-          <Title level={3}>Add icon in QRCode</Title>
+          <Title level={3}>{ t('add_icon_title') }</Title>
           <hr/>
           <Form
             name="basic"
@@ -332,21 +334,21 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="QRCode size(32 ~ 512)">
+            <Form.Item label={ t('icon_size') }>
               <InputNumber min={32} max={512} value={iconSize} onChange={setIconSize} />
             </Form.Item>
-            <Form.Item label="Add icon">
+            <Form.Item label={ t('add_icon_label') }>
               <Space>
                 <Upload {...props}>
-                  <Button icon={<UploadOutlined />}>Add icon</Button>
+                  <Button icon={<UploadOutlined />}>{  t('add_icon_label') }</Button>
                 </Upload>
-                <Button type="primary" onClick={removeIcon} danger>Remove icon</Button>
+                <Button type="primary" onClick={removeIcon} danger>{ t('remove_icon') }</Button>
               </Space>
             </Form.Item>
           </Form>
         </div>
         <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
-          <Title level={3}>QRCode setting</Title>
+          <Title level={3}>{ t('qrcode_setting_title') }</Title>
           <hr/>
           <Form
             name="basic"
@@ -354,10 +356,10 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="QRCode size(64 ~ 1024)">
+            <Form.Item label={ t('qrcode_size') }>
               <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
             </Form.Item>
-            <Form.Item label="background color">
+            <Form.Item label={ t('bg_color') }>
               <div style={ colorPickBgStyles.swatch } onClick={ () => {colorClick('bg')} }>
                 <div style={ colorPickBgStyles.color } />
               </div>
@@ -366,7 +368,7 @@ function App() {
                 <SketchPicker color={ colorPickerBgProps.color } onChange={ (color) => {ColorChange(color, 'bg')} } />
               </div> : null }
             </Form.Item>
-            <Form.Item label="QRCode color">
+            <Form.Item label={ t('qrcode_color') }>
               <div style={ colorPickFgStyles.swatch } onClick={ () => {colorClick()} }>
                 <div style={ colorPickFgStyles.color } />
               </div>
@@ -378,7 +380,7 @@ function App() {
           </Form>
         </div>
         <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
-          <Title level={3}>QRCode output</Title>
+          <Title level={3}>{ t('qrcode_output_title') }</Title>
           <hr/>
           <Form
             name="basic"
@@ -386,10 +388,10 @@ function App() {
             labelCol={{ span: 16 }}
             wrapperCol={{ span: 16 }}
           >
-            <Form.Item label="file name">
-              <Input minLength={1} maxLength={2048} value={fileName} onChange={setFilename}  placeholder="Input filename" />
+            <Form.Item label={ t('file_name') }>
+              <Input minLength={1} maxLength={2048} value={fileName} onChange={setFilename}  placeholder={ t('input_file_name') } />
             </Form.Item>
-            <Button type="primary" icon={<DownloadOutlined />} onClick={download} >Download</Button>
+            <Button type="primary" icon={<DownloadOutlined />} onClick={download} >{ t('download') }</Button>
           </Form>
         </div>
       </main>
