@@ -1,6 +1,7 @@
 {
   "short_name": "QRCode maker",
   "name": "QRCode maker",
+  "description": "Free online QR code generator - turn any text or URL into a QR code, add your own logo, customize colors and size, and download it instantly.",
   "icons": [
     {
       "src": "favicon.ico",

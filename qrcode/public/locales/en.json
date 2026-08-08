@@ -1,6 +1,7 @@
 {
   "h1_title": "QRCode MAKER - Make QRCode and easily download",
   "desc": "You can easily build QRCode and download",
+  "about_desc": "Enter any text or URL, then customize the color, size, and optionally add your own logo — your QR code is generated instantly. Everything happens locally in your browser, so your text is never uploaded to a server. Once you're happy with the result, download it as a PNG and use it anywhere: print, business cards, posters, or share online.",
   "input_title": "Please enter the text to generate QRCode",
   "input_label": "input text",
   "add_icon_title": "Add icon to QRCode",
