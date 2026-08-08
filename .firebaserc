@@ -5,6 +5,9 @@
   "targets": {
     "tool-19eb9": {
       "hosting": {
+        "tool": [
+          "tool-19eb9"
+        ],
         "qrcode": [
           "qrcode-make"
         ]
