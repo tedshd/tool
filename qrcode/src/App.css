@@ -34,3 +34,36 @@ h2 {
 .sketch-picker {
   color: #282c34;
 }
+
+/* Darker danger red for WCAG AA contrast (4.5:1+) with white button text */
+.ant-btn-dangerous.ant-btn-primary {
+  background-color: #b42318;
+  border-color: #b42318;
+}
+
+.faq {
+  max-width: 640px;
+  margin: 32px auto 0;
+}
+
+.faq-item {
+  margin-bottom: 16px;
+}
+
+.faq-item p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+footer {
+  max-width: 640px;
+  margin: 32px auto 16px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.65);
+}

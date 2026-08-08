@@ -191,9 +191,10 @@ function App() {
   }, [qrCodeText])
 
   useEffect(() => {
-    document.title = t('h1_title')
+    // Keep the SEO-optimized <title> set in index.html — don't overwrite it
+    // with the on-page H1 copy, which targets readability, not search intent.
     document.documentElement.lang = i18n.language
-  }, [t, i18n.language])
+  }, [i18n.language])
 
   const removeIcon = () => {
     setFileList([])
@@ -322,7 +323,7 @@ function App() {
             wrapperCol={{ span: 16 }}
           >
             <Form.Item label={ t('icon_size') }>
-              <InputNumber min={32} max={512} value={iconSize} onChange={setIconSize} />
+              <InputNumber aria-label={ t('icon_size') } min={32} max={512} value={iconSize} onChange={setIconSize} />
             </Form.Item>
             <Form.Item label={ t('add_icon_label') }>
               <Space>
@@ -344,7 +345,7 @@ function App() {
             wrapperCol={{ span: 16 }}
           >
             <Form.Item label={ t('qrcode_size') }>
-              <InputNumber min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
+              <InputNumber aria-label={ t('qrcode_size') } min={64} max={1024} value={qrCodeSize} onChange={setQrCodeSize} />
             </Form.Item>
             <Form.Item label={ t('bg_color') }>
               <div style={ colorPickBgStyles.swatch } onClick={ () => {colorClick('bg')} }>
@@ -385,7 +386,28 @@ function App() {
       <section>
         <div id='container'></div>
       </section>
-      <footer></footer>
+      <section className="faq p-16">
+        <Title level={3}>{ t('faq_title') }</Title>
+        <hr/>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q1') }</Title>
+          <p>{ t('faq_a1') }</p>
+        </div>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q2') }</Title>
+          <p>{ t('faq_a2') }</p>
+        </div>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q3') }</Title>
+          <p>{ t('faq_a3') }</p>
+        </div>
+      </section>
+      <footer className="p-16">
+        <p>{ t('footer_privacy') }</p>
+        <p>
+          © {new Date().getFullYear()} QRCode Maker · <a href="https://github.com/tedshd/tool" target="_blank" rel="noopener noreferrer">{ t('footer_source') }</a>
+        </p>
+      </footer>
     </div>
   </ConfigProvider>
   );
