@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -20,21 +20,12 @@ function App() {
   const { t, i18n } = useTranslation()
 
   const [qrCodeText, setQrCodeText] = useInputChange('')
+  const [debouncedQrCodeText, setDebouncedQrCodeText] = useState('')
   const [qrCodeTextStatus, setQrCodeTextStatus] = useState('')
   const [fileName, setFilename] = useInputChange('qrcode')
 
-  const [qrCodeSize, setQrCodeSize] = useState('120')
-  const [iconSize, setIconSize] = useState('32')
-
-  // const state = {
-  //   displayColorPicker: false,
-  //   color: {
-  //     r: '241',
-  //     g: '112',
-  //     b: '19',
-  //     a: '1',
-  //   },
-  // };
+  const [qrCodeSize, setQrCodeSize] = useState(120)
+  const [iconSize, setIconSize] = useState(32)
 
   const [colorPickerBgProps, setColorPickerBgProps] = useState({
     displayColorPicker: false,
@@ -163,15 +154,14 @@ function App() {
   }
 
   const ColorChange = (color, type) => {
-    console.log(color)
     if (type === 'bg') {
       setColorPickerBgProps({
-        ...colorPickerBgProps.displayColorPicker,
+        ...colorPickerBgProps,
         color: color
       })
     } else {
       setColorPickerFgProps({
-        ...colorPickerFgProps.displayColorPicker,
+        ...colorPickerFgProps,
         color: color
       })
     }
@@ -185,41 +175,47 @@ function App() {
       let dataUrl = await imgReader(file)
       file.src = dataUrl
       setFileList([file]);
-      console.log(file)
       return false;
     },
     fileList,
-  }
-
-  // With async/await
-  let opts = {
-    errorCorrectionLevel: 'M',
-    type: 'image/png',
-    margin: 1,
-    width: qrCodeSize,
-    height: qrCodeSize,
-    color: {
-      dark: colorPickerFgProps.color.hex,
-      light: colorPickerBgProps.color.hex
-    }
   }
 
   useEffect(() => {
     if (qrCodeText) {
       setQrCodeTextStatus('')
     }
-    generateQR(qrCodeText)
-  }, [fileList, qrCodeText, qrCodeSize, iconSize, colorPickerBgProps.color, colorPickerFgProps.color])
+    const handler = setTimeout(() => {
+      setDebouncedQrCodeText(qrCodeText)
+    }, 300)
+    return () => clearTimeout(handler)
+  }, [qrCodeText])
+
+  useEffect(() => {
+    document.title = t('h1_title')
+    document.documentElement.lang = i18n.language
+  }, [t, i18n.language])
 
   const removeIcon = () => {
     setFileList([])
   }
 
-  const generateQR = (text) => {
+  const generateQR = useCallback((text) => {
     let container = document.getElementById('container')
     container.innerHTML = ''
     if (!text) {
       return
+    }
+
+    let opts = {
+      errorCorrectionLevel: 'M',
+      type: 'image/png',
+      margin: 1,
+      width: qrCodeSize,
+      height: qrCodeSize,
+      color: {
+        dark: colorPickerFgProps.color.hex,
+        light: colorPickerBgProps.color.hex
+      }
     }
 
     QRCode.toCanvas(text, opts, function (err, canvas) {
@@ -233,23 +229,21 @@ function App() {
     function addIcon() {
       let canvas = document.querySelector('canvas')
       let context = canvas.getContext('2d')
-      console.log(context)
       let newImage = new Image()
-      // newImage.src = icon;
       newImage.src = fileList[0].src
       newImage.onload = () => {
-        console.log(newImage)
-        let w = newImage.width
-        let h = newImage.height
-        w = iconSize
-        h = iconSize*(newImage.width / newImage.height)
-        let x = (qrCodeSize/2) - (w/2)
-        let y = (qrCodeSize/2) - (h/2)
-        console.log(x, y, w, h)
+        let w = iconSize
+        let h = iconSize * (newImage.width / newImage.height)
+        let x = (qrCodeSize / 2) - (w / 2)
+        let y = (qrCodeSize / 2) - (h / 2)
         context.drawImage(newImage, x, y, w, h)
       }
     }
-  }
+  }, [fileList, iconSize, qrCodeSize, colorPickerFgProps.color.hex, colorPickerBgProps.color.hex])
+
+  useEffect(() => {
+    generateQR(debouncedQrCodeText)
+  }, [debouncedQrCodeText, generateQR])
 
   const download = () => {
     if (!qrCodeText) {
@@ -301,6 +295,7 @@ function App() {
       <header className='p-8'>
         <h1>{ t('h1_title') }</h1>
         <h2>{ t('desc') }</h2>
+        <p className="about-desc">{ t('about_desc') }</p>
       </header>
       <main className="pure-g">
         <div className="pure-u-1  pure-u-md-1-2 pure-u-lg-1-4 p-16">
@@ -361,12 +356,12 @@ function App() {
               </div> : null }
             </Form.Item>
             <Form.Item label={ t('qrcode_color') }>
-              <div style={ colorPickFgStyles.swatch } onClick={ () => {colorClick()} }>
+              <div style={ colorPickFgStyles.swatch } onClick={ () => {colorClick('fg')} }>
                 <div style={ colorPickFgStyles.color } />
               </div>
               { colorPickerFgProps.displayColorPicker ? <div style={ colorPickFgStyles.popover }>
-                <div style={ colorPickFgStyles.cover } onClick={ () => {colorClose()} }/>
-                <SketchPicker color={ colorPickerFgProps.color } onChange={ (color) => {ColorChange(color)} } />
+                <div style={ colorPickFgStyles.cover } onClick={ () => {colorClose('fg')} }/>
+                <SketchPicker color={ colorPickerFgProps.color } onChange={ (color) => {ColorChange(color, 'fg')} } />
               </div> : null }
             </Form.Item>
           </Form>

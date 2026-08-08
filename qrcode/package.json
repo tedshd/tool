@@ -1,7 +1,9 @@
 {
   "name": "qrcode",
   "version": "0.1.0",
+  "description": "Free online QR code generator - turn any text or URL into a QR code, add your own logo, customize colors and size, and download it instantly.",
   "private": true,
+  "homepage": "https://qrcode-make.web.app",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
