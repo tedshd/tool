@@ -401,6 +401,18 @@ function App() {
           <Title level={4}>{ t('faq_q3') }</Title>
           <p>{ t('faq_a3') }</p>
         </div>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q4') }</Title>
+          <p>{ t('faq_a4') }</p>
+        </div>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q5') }</Title>
+          <p>{ t('faq_a5') }</p>
+        </div>
+        <div className="faq-item">
+          <Title level={4}>{ t('faq_q6') }</Title>
+          <p>{ t('faq_a6') }</p>
+        </div>
       </section>
       <footer className="p-16">
         <p>{ t('footer_privacy') }</p>
