@@ -23,6 +23,12 @@
   "faq_a2": "No. The QR code is rendered entirely in your browser using JavaScript — the text or URL you type is never sent to a server.",
   "faq_q3": "Can I add my own logo to the QR code?",
   "faq_a3": "Yes. Upload a PNG or JPG image and it will be placed in the center of the QR code. You can adjust its size before downloading.",
+  "faq_q4": "What size can the QR code be?",
+  "faq_a4": "The QR code itself can be set anywhere from 64px to 1024px, and the logo from 32px to 512px — small enough for a business card, large enough for a poster.",
+  "faq_q5": "Will the QR code still scan if I add a logo?",
+  "faq_a5": "In most cases, yes. This generator uses medium-level (M) error correction, which keeps codes readable even with roughly 15% of the image obscured — keep your logo under about a quarter of the QR code's area for reliable scanning.",
+  "faq_q6": "What file format do I get?",
+  "faq_a6": "A PNG image, saved with whatever file name you choose before downloading.",
   "footer_privacy": "Everything runs client-side in your browser — no accounts, no tracking of what you generate.",
   "footer_source": "source on GitHub"
 }
